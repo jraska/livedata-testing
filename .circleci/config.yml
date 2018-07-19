@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx4096m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "client/build.gradle" }}
+      - run:
+          name: Get Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "client/build.gradle" }}
+      - run:
+          name: Run Tests
+          command: ./gradlew lint test
+      - store_artifacts:
+          path: livedata-testing/build/reports
+          destination: livedata-testing/reports
+      - store_artifacts:
+          path: livedata-testing-ktx/build/reports
+          destination: livedata-testing-ktx/reports
+      - store_test_results:
+          path: livedata-testing/build/test-results
+      - store_test_results:
+          path: livedata-testing-ktx/build/test-results
+
