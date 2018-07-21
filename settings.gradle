@@ -1,1 +1,1 @@
-include ':livedata-testing', ':livedata-testing-ktx'
+include ':testing', ':testing-ktx'
