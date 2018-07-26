@@ -31,8 +31,6 @@ TestObserver.test(liveData)
 
 Don't forget to use `InstantTaskExecutorRule` from `android.arch.core:core-testing` to make your LiveData test run properly.
 
-<!-- TODO(josef): Example tests -->
-
 ## Download
 
 Grab via Gradle:
@@ -44,9 +42,10 @@ testImplementation 'com.jraska.livedata:testing-ktx:0.2.0' // If you are Kotlin 
 ## Philosophy
 
 This library is created in a belief that to effective and valuable test should be fast to write and model real code usage.
-As by Architecture components spec Activity should communicate with its ViewModel only through subscribing to LiveData.
-TestObserver in this case simulates teh activity and by testing LiveData, we can test our whole logic except the View where the responsibility belongs to Activity.
+As by Architecture components spec Activity should communicate with its ViewModel only through observing LiveData.
+TestObserver in this case simulates the Activity and by testing LiveData, we could test our whole logic except the View where the responsibility belongs to Activity.
 Key ideas:
-* No Mocking or Robolectric
-* Fluent API
-* Easy to write tests
+* Test pretends to be an Activity
+* No Android framework mocking or Robolectric - just standard fast JUnit tests
+* Fluent API inspired by RxJava TestObserver
+* Easy to write fast executing tests - possibly TDD
