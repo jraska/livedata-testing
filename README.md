@@ -12,20 +12,20 @@ Kotlin:
 ```java
 liveData.test()
       .assertHasValue()
-      .assertValue(4)
       .assertValue { it > 3 }
+      .assertValue(4)
+      .assertHistorySize(4)
       .assertNever { it > 4 }
-      .assertHistorySize(5)
 ```
 
-Java almost the same:
+Java:
 ```java
 TestObserver.test(liveData)
-      .assertHasValue()
-      .assertValue(4)
-      .assertValue { it > 3 }
-      .assertNever { it > 4 }
-      .assertHistorySize(5);
+  .assertHasValue()
+  .assertValue(value -> value > 3)
+  .assertValue(4)
+  .assertHistorySize(4)
+  .assertNever(value -> value > 4);
 ```
 
 Don't forget to use `InstantTaskExecutorRule` from `android.arch.core:core-testing` to make your LiveData test run properly.

@@ -32,7 +32,7 @@ public class ExampleJavaTest {
 
     counter.triggerCountingToFour();
 
-    TestObserver.test(counter.counterLiveData())
+    TestObserver.test(liveData)
       .assertHasValue()
       .assertValue(value -> value > 3)
       .assertValue(4)
