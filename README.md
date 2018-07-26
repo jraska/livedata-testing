@@ -8,7 +8,8 @@ TestObserver to easily test LiveData and make assertions on them.
 ## Usage
 
 Having `LiveData<Integer>` of counter from 1 to 4:
-Kotlin:
+
+Kotlin - see [ExampleTest.kt](https://github.com/jraska/livedata-testing/blob/master/testing-ktx/src/test/java/com/jraska/livedata/example/ExampleTest.kt)
 ```java
 liveData.test()
       .assertHasValue()
@@ -18,7 +19,7 @@ liveData.test()
       .assertNever { it > 4 }
 ```
 
-Java:
+Java - see [ExampleTest.java](https://github.com/jraska/livedata-testing/blob/master/testing-ktx/src/test/java/com/jraska/livedata/example/ExampleJavaTest.java)
 ```java
 TestObserver.test(liveData)
   .assertHasValue()
