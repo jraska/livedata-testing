@@ -21,13 +21,13 @@ jobs:
           name: Run Tests
           command: ./gradlew lint test
       - store_artifacts:
-          path: livedata-testing/build/reports
-          destination: livedata-testing/reports
+          path: testing/build/reports
+          destination: testing/reports
       - store_artifacts:
-          path: livedata-testing-ktx/build/reports
-          destination: livedata-testing-ktx/reports
+          path: testing-ktx/build/reports
+          destination: testing-ktx/reports
       - store_test_results:
-          path: livedata-testing/build/test-results
+          path: testing/build/test-results
       - store_test_results:
-          path: livedata-testing-ktx/build/test-results
+          path: testing-ktx/build/test-results
 
