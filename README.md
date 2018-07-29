@@ -7,7 +7,7 @@ TestObserver to easily test LiveData and make assertions on them.
 
 ## Usage
 
-Having `LiveData<Integer>` of counter from 1 to 4:
+Having `LiveData<Integer>` of counter from 0 to 4:
 
 Kotlin - see [ExampleTest.kt](https://github.com/jraska/livedata-testing/blob/master/testing-ktx/src/test/java/com/jraska/livedata/example/ExampleTest.kt)
 ```java
@@ -15,7 +15,7 @@ liveData.test()
       .assertHasValue()
       .assertValue { it > 3 }
       .assertValue(4)
-      .assertHistorySize(4)
+      .assertHistorySize(5)
       .assertNever { it > 4 }
 ```
 
@@ -25,7 +25,7 @@ TestObserver.test(liveData)
   .assertHasValue()
   .assertValue(value -> value > 3)
   .assertValue(4)
-  .assertHistorySize(4)
+  .assertHistorySize(5)
   .assertNever(value -> value > 4);
 ```
 

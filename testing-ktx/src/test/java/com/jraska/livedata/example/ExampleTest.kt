@@ -10,24 +10,26 @@ import org.junit.Test
 class ExampleTest {
   @get:Rule val testRule = InstantTaskExecutorRule()
 
-  private lateinit var counter: ExampleCounter
+  private lateinit var viewModel: CounterViewModel
 
   @Before
   fun before() {
-    counter = ExampleCounter()
+    viewModel = CounterViewModel()
   }
 
   @Test
   fun directAssertion() {
-    counter.counterLiveData()
+    viewModel.counterLiveData()
       .test()
-      .assertNoValue()
-      .assertHistorySize(0)
+      .assertHasValue()
+      .assertHistorySize(1)
       .assertNever { it > 0 }
 
-    counter.triggerCountingToFour()
+    for (x in 1..4) {
+      viewModel.plusButtonClicked()
+    }
 
-    counter.counterLiveData()
+    viewModel.counterLiveData()
       .test()
       .assertHasValue()
       .assertValue { it > 3 }
@@ -38,34 +40,47 @@ class ExampleTest {
 
   @Test
   fun counterHistoryTest() {
-    val testObserver = counter.counterLiveData().test()
+    val testObserver = viewModel.counterLiveData().test()
 
-    testObserver.assertNoValue()
-      .assertHistorySize(0)
+    testObserver.assertHasValue()
+      .assertHistorySize(1)
       .assertNever { it > 0 }
 
-    counter.triggerCountingToFour()
+    for (x in 1..4) {
+      viewModel.plusButtonClicked()
+    }
 
     testObserver.assertHasValue()
       .assertValue { it > 3 }
       .assertValue(4)
-      .assertHistorySize(4)
+      .assertHistorySize(5)
+      .assertNever { it > 4 }
+
+    for (i in 1..4) {
+      viewModel.minusButtonClicked()
+    }
+
+    testObserver.assertHasValue()
+      .assertHistorySize(9)
+      .assertValue(0)
       .assertNever { it > 4 }
   }
 
   @Test
   fun usingAssertJ() {
-    val testObserver = counter.counterLiveData().test()
+    val testObserver = viewModel.counterLiveData().test()
 
-    counter.triggerCountingToFour()
+    for (x in 1..4) {
+      viewModel.plusButtonClicked()
+    }
 
     val value = testObserver.value()
     assertThat(value).isEqualTo(4)
 
     val valueHistory = testObserver.valueHistory()
-    assertThat(valueHistory).containsExactly(1, 2, 3, 4)
+    assertThat(valueHistory).containsExactly(0, 1, 2, 3, 4)
 
     testObserver.dispose()
-    assertThat(counter.counterLiveData().hasObservers()).isFalse()
+    assertThat(viewModel.counterLiveData().hasObservers()).isFalse()
   }
 }
