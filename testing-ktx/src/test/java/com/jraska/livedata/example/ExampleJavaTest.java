@@ -14,23 +14,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExampleJavaTest {
   @Rule public InstantTaskExecutorRule testRule = new InstantTaskExecutorRule();
 
-  private ExampleCounter counter;
+  private CounterViewModel viewModel;
 
   @Before
   public void setUp() {
-    counter = new ExampleCounter();
+    viewModel = new CounterViewModel();
   }
 
   @Test
   public void directAssertion() {
-    LiveData<Integer> liveData = counter.counterLiveData();
+    LiveData<Integer> liveData = viewModel.counterLiveData();
 
     TestObserver.test(liveData)
-      .assertNoValue()
-      .assertHistorySize(0)
+      .assertHasValue()
+      .assertHistorySize(1)
       .assertNever(value -> value > 0);
 
-    counter.triggerCountingToFour();
+    for (int i = 0; i < 4; i++) {
+      viewModel.plusButtonClicked();
+    }
 
     TestObserver.test(liveData)
       .assertHasValue()
@@ -42,34 +44,38 @@ public class ExampleJavaTest {
 
   @Test
   public void counterHistoryTest() {
-    LiveData<Integer> liveData = counter.counterLiveData();
+    LiveData<Integer> liveData = viewModel.counterLiveData();
     TestObserver<Integer> testObserver = TestObserver.test(liveData);
 
-    testObserver.assertNoValue()
-      .assertHistorySize(0)
+    testObserver.assertHasValue()
+      .assertHistorySize(1)
       .assertNever(value -> value > 0);
 
-    counter.triggerCountingToFour();
+    for (int i = 0; i < 4; i++) {
+      viewModel.plusButtonClicked();
+    }
 
     testObserver.assertHasValue()
       .assertValue(value -> value > 3)
       .assertValue(4)
-      .assertHistorySize(4)
+      .assertHistorySize(5)
       .assertNever(value -> value > 4);
   }
 
   @Test
   public void usingAssertJ() {
-    LiveData<Integer> liveData = counter.counterLiveData();
+    LiveData<Integer> liveData = viewModel.counterLiveData();
     TestObserver<Integer> testObserver = TestObserver.test(liveData);
 
-    counter.triggerCountingToFour();
+    for (int i = 0; i < 4; i++) {
+      viewModel.plusButtonClicked();
+    }
 
     Integer value = testObserver.value();
     assertThat(value).isEqualTo(4);
 
     List<Integer> valueHistory = testObserver.valueHistory();
-    assertThat(valueHistory).containsExactly(1, 2, 3, 4);
+    assertThat(valueHistory).containsExactly(0, 1, 2, 3, 4);
 
     testObserver.dispose();
     assertThat(liveData.hasObservers()).isFalse();
@@ -79,15 +85,17 @@ public class ExampleJavaTest {
   public void useObserverByYourself() {
     TestObserver<Integer> testObserver = TestObserver.create();
 
-    counter.counterLiveData().observeForever(testObserver);
-    counter.triggerCountingToFour();
+    viewModel.counterLiveData().observeForever(testObserver);
+    for (int i = 0; i < 4; i++) {
+      viewModel.plusButtonClicked();
+    }
 
     testObserver.assertHasValue()
       .assertValue(4)
-      .assertHistorySize(4)
+      .assertHistorySize(5)
       .assertNever(value -> value > 4);
 
     // Potential remove needs to be handled by you
-    counter.counterLiveData().removeObserver(testObserver);
+    viewModel.counterLiveData().removeObserver(testObserver);
   }
 }
