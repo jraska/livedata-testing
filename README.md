@@ -3,9 +3,12 @@ TestObserver to easily test LiveData and make assertions on them.
 
 [![CircleCI](https://circleci.com/gh/jraska/livedata-testing.svg?style=svg)](https://circleci.com/gh/jraska/livedata-testing)
 [![Download](https://api.bintray.com/packages/jraska/maven/com.jraska.livedata%3Atesting-ktx/images/download.svg)](https://bintray.com/jraska/maven/com.jraska.livedata%3Atesting-ktx/_latestVersion)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg) ](https://github.com/jraska/Falcon/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg) ](https://github.com/jraska/livedata-testing/blob/master/LICENSE)
+
 
 Read [Medium Article](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4) for more info.
+
+[![License](img/livedata-testing.png)](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4)
 
 ## Usage
 
