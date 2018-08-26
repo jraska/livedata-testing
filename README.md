@@ -8,7 +8,7 @@ TestObserver to easily test LiveData and make assertions on them.
 
 Read [Medium Article](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4) for more info.
 
-[![License](img/livedata-testing.png)](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4)
+[![Explanatory Diagram](img/livedata-testing.png)](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4)
 
 ## Usage
 
@@ -34,15 +34,18 @@ TestObserver.test(liveData)
   .assertNever(value -> value > 4);
 ```
 
-Don't forget to use `InstantTaskExecutorRule` from `android.arch.core:core-testing` to make your LiveData test run properly.
+Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-testing` to make your LiveData test run properly.
 
 ## Download
 
 Grab via Gradle:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:0.2.0'
-testImplementation 'com.jraska.livedata:testing-ktx:0.2.0' // If you are Kotlin positive
+testImplementation 'com.jraska.livedata:testing:0.3.0'
+testImplementation 'com.jraska.livedata:testing-ktx:0.3.0' // If you are Kotlin positive
 ```
+
+If you are not using `androidx` namespace yet, please use version 0.2.0. Explanation [here](https://android-developers.googleblog.com/2018/05/hello-world-androidx.html).
+
 
 ## Philosophy
 
