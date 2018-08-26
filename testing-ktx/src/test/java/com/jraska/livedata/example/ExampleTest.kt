@@ -1,6 +1,6 @@
 package com.jraska.livedata.example
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jraska.livedata.test
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before

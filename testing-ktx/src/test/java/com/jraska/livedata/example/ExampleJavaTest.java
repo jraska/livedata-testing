@@ -1,7 +1,7 @@
 package com.jraska.livedata.example;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.LiveData;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 import com.jraska.livedata.TestObserver;
 import org.junit.Before;
 import org.junit.Rule;

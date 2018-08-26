@@ -4,11 +4,11 @@ apply plugin: 'kotlin-android'
 version = rootProject.ext.version
 
 android {
-  compileSdkVersion 27
-  buildToolsVersion '27.0.3'
+  compileSdkVersion 28
+  buildToolsVersion '28.0.2'
   defaultConfig {
     minSdkVersion 19
-    targetSdkVersion 27
+    targetSdkVersion 28
     versionName version
     versionCode rootProject.ext.versionCode
   }
@@ -20,14 +20,14 @@ android {
 }
 
 dependencies {
-  implementation 'com.android.support:support-annotations:27.1.1'
-  implementation 'android.arch.lifecycle:runtime:1.1.1'
-  implementation 'android.arch.lifecycle:livedata-core:1.1.1'
+  implementation 'androidx.annotation:annotation:1.0.0-rc01'
+  implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
+  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.0.0-rc01'
 
   testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   testImplementation 'junit:junit:4.12'
-  testImplementation 'android.arch.core:core-testing:1.1.1'
-  testImplementation 'org.assertj:assertj-core:3.10.0'
+  testImplementation 'androidx.arch.core:core-testing:2.0.0-rc01'
+  testImplementation 'org.assertj:assertj-core:3.11.0'
 }
 
 ext {
