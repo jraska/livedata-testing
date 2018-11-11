@@ -5,7 +5,7 @@ version = rootProject.ext.version
 
 android {
   compileSdkVersion 28
-  buildToolsVersion '28.0.2'
+  buildToolsVersion '28.0.3'
   defaultConfig {
     minSdkVersion 19
     targetSdkVersion 28
@@ -20,14 +20,14 @@ android {
 }
 
 dependencies {
-  implementation 'androidx.annotation:annotation:1.0.0-rc01'
-  implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
-  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.0.0-rc01'
+  implementation 'androidx.annotation:annotation:1.0.0'
+  implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.0.0'
 
   testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   testImplementation 'junit:junit:4.12'
-  testImplementation 'androidx.arch.core:core-testing:2.0.0-rc01'
-  testImplementation 'org.assertj:assertj-core:3.11.0'
+  testImplementation 'androidx.arch.core:core-testing:2.0.0'
+  testImplementation 'org.assertj:assertj-core:3.11.1'
 }
 
 ext {
