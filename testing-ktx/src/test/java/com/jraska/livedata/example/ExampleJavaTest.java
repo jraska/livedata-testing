@@ -98,4 +98,25 @@ public class ExampleJavaTest {
     // Potential remove needs to be handled by you
     viewModel.counterLiveData().removeObserver(testObserver);
   }
+
+  @Test
+  public void awaitAsyncValue() throws InterruptedException {
+    LiveData<String> labelData = viewModel.counterLabel();
+
+    TestObserver<String> testObserver = TestObserver.test(labelData)
+      .assertNoValue();
+
+    viewModel.asyncUpdateLabel("initial");
+
+    testObserver.assertNoValue()
+      .awaitValue()
+      .assertHasValue();
+
+    viewModel.asyncUpdateLabel("different");
+
+    testObserver
+      .assertValue("initial")
+      .awaitNextValue()
+      .assertValue("different");
+  }
 }
