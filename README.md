@@ -17,16 +17,18 @@ Having `LiveData<Integer>` of counter from 0 to 4:
 Kotlin - see [ExampleTest.kt](https://github.com/jraska/livedata-testing/blob/master/testing-ktx/src/test/java/com/jraska/livedata/example/ExampleTest.kt)
 ```java
 liveData.test()
-      .assertHasValue()
-      .assertValue { it > 3 }
-      .assertValue(4)
-      .assertHistorySize(5)
-      .assertNever { it > 4 }
+  .awaitValue()
+  .assertHasValue()
+  .assertValue { it > 3 }
+  .assertValue(4)
+  .assertHistorySize(5)
+  .assertNever { it > 4 }
 ```
 
 Java - see [ExampleTest.java](https://github.com/jraska/livedata-testing/blob/master/testing-ktx/src/test/java/com/jraska/livedata/example/ExampleJavaTest.java)
 ```java
 TestObserver.test(liveData)
+  .awaitValue()
   .assertHasValue()
   .assertValue(value -> value > 3)
   .assertValue(4)
@@ -40,8 +42,8 @@ Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-test
 
 Grab via Gradle:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:0.3.0'
-testImplementation 'com.jraska.livedata:testing-ktx:0.3.0' // If you are Kotlin positive
+testImplementation 'com.jraska.livedata:testing:0.4.0'
+testImplementation 'com.jraska.livedata:testing-ktx:0.4.0' // If you are Kotlin positive
 ```
 
 If you are not using `androidx` namespace yet, please use version 0.2.0. Explanation [here](https://android-developers.googleblog.com/2018/05/hello-world-androidx.html).
