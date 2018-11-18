@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.TimeUnit
 
 class TestObserverTest {
   @get:Rule val testRule = InstantTaskExecutorRule()
@@ -60,7 +61,8 @@ class TestObserverTest {
     testLiveData.value = 3
     testLiveData.value = 4
 
-    val value = testObserver.assertHasValue()
+    val value = testObserver
+      .awaitValue()
       .assertHasValue()
       .assertHistorySize(2)
       .assertValue(4)
@@ -69,6 +71,39 @@ class TestObserverTest {
       .value()
 
     assertThat(value).isEqualTo(4)
+  }
+
+  @Test
+  fun whenAwaits_thenGetsValue() {
+    Thread(setValueAsOne()).start()
+
+    TestObserver.test(testLiveData)
+      .assertNoValue()
+      .awaitValue()
+      .assertHasValue()
+
+    Thread(setValueAsTwo()).start()
+
+    TestObserver.test(testLiveData)
+      .assertValue(1)
+      .awaitNextValue()
+      .assertValue(2)
+  }
+
+  @Test
+  fun whenAwaitsWithTimeout_thenGetsValue() {
+    Thread(setValueAsOne()).start()
+
+    TestObserver.test(testLiveData)
+      .awaitValue(100, TimeUnit.MILLISECONDS)
+      .assertHasValue()
+
+    Thread(setValueAsTwo()).start()
+
+    TestObserver.test(testLiveData)
+      .assertValue(1)
+      .awaitNextValue(1, TimeUnit.SECONDS)
+      .assertValue(2)
   }
 
   @Test(expected = AssertionError::class)
@@ -112,5 +147,15 @@ class TestObserverTest {
     testLiveData.value = 5
 
     testObserver.assertNever { it == 4 }
+  }
+
+  private fun setValueAsOne() = Runnable {
+    Thread.sleep(10)
+    testLiveData.value = 1
+  }
+
+  private fun setValueAsTwo() = Runnable {
+    Thread.sleep(10)
+    testLiveData.value = 2
   }
 }

@@ -10,10 +10,14 @@ import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
   private final LiveData<T> observedLiveData;
+
+  private CountDownLatch valueLatch = new CountDownLatch(1);
 
   private TestObserver(LiveData<T> observedLiveData) {
     this.observedLiveData = observedLiveData;
@@ -22,6 +26,7 @@ public final class TestObserver<T> implements Observer<T> {
   @Override
   public void onChanged(@Nullable T value) {
     valueHistory.add(value);
+    valueLatch.countDown();
   }
 
   public T value() {
@@ -92,6 +97,62 @@ public final class TestObserver<T> implements Observer<T> {
       }
     }
 
+    return this;
+  }
+
+  /**
+   * Awaits until this TestObserver has any value.
+   *
+   * If this TestObserver has already value then this method returns immediately.
+   *
+   * @return this
+   * @throws InterruptedException if the current thread is interrupted while waiting
+   */
+  public TestObserver<T> awaitValue() throws InterruptedException {
+    valueLatch.await();
+    return this;
+  }
+
+  /**
+   * Awaits the specified amount of time or until this TestObserver has any value.
+   *
+   * If this TestObserver has already value then this method returns immediately.
+   *
+   * @return this
+   * @throws InterruptedException if the current thread is interrupted while waiting
+   */
+  public TestObserver<T> awaitValue(long timeout, TimeUnit timeUnit) throws InterruptedException {
+    valueLatch.await(timeout, timeUnit);
+    return this;
+  }
+
+  /**
+   * Awaits until this TestObserver receives next value.
+   *
+   * If this TestObserver has already value then it awaits for another one.
+   *
+   * @return this
+   * @throws InterruptedException if the current thread is interrupted while waiting
+   */
+  public TestObserver<T> awaitNextValue() throws InterruptedException {
+    return withNewLatch().awaitValue();
+  }
+
+
+  /**
+   * Awaits the specified amount of time or until this TestObserver receives next value.
+   *
+   * If this TestObserver has already value then it awaits for another one.
+   *
+   * @return this
+   * @throws InterruptedException if the current thread is interrupted while waiting
+   */
+  public TestObserver<T> awaitNextValue(long timeout, TimeUnit timeUnit) throws InterruptedException {
+    return withNewLatch().awaitValue(timeout, timeUnit);
+  }
+
+  private TestObserver<T> withNewLatch() {
+    valueLatch = new CountDownLatch(1);
     return this;
   }
 

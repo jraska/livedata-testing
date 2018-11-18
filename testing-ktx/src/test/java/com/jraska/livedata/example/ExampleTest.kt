@@ -83,4 +83,24 @@ class ExampleTest {
     testObserver.dispose()
     assertThat(viewModel.counterLiveData().hasObservers()).isFalse()
   }
+
+  @Test
+  fun awaitAsyncValue() {
+    val testObserver = viewModel.counterLabel()
+      .test()
+      .assertNoValue()
+
+    viewModel.asyncUpdateLabel("initial")
+
+    testObserver.assertNoValue()
+      .awaitValue()
+      .assertHasValue()
+
+    viewModel.asyncUpdateLabel("different")
+
+    testObserver
+      .assertValue("initial")
+      .awaitNextValue()
+      .assertValue("different")
+  }
 }

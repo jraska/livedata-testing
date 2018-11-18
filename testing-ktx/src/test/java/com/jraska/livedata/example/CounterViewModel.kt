@@ -2,12 +2,15 @@ package com.jraska.livedata.example
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import java.util.concurrent.atomic.AtomicInteger
 
 class CounterViewModel {
   private val counterData = MutableLiveData<Int>()
+  private val labelData = MutableLiveData<String>()
+  private val counter = AtomicInteger()
 
   init {
-    counterData.value = 0
+    counterData.value = counter.get()
   }
 
   fun counterLiveData(): LiveData<Int> {
@@ -15,13 +18,22 @@ class CounterViewModel {
   }
 
   fun plusButtonClicked() {
-    counterData.value = counterData.value!! + 1
+    counterData.value = counter.incrementAndGet()
   }
 
   fun minusButtonClicked() {
-    val value = counterData.value!!
+    counterData.value = counter.decrementAndGet()
+  }
 
-    if (value > 0)
-      counterData.value = value - 1
+  fun counterLabel(): LiveData<String> {
+    return labelData
+  }
+
+  fun asyncUpdateLabel(label: String) {
+    val runnable = Runnable {
+      Thread.sleep(10)
+      labelData.postValue(label) }
+
+    Thread(runnable).start()
   }
 }
