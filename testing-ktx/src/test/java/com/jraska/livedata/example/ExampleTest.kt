@@ -80,7 +80,7 @@ class ExampleTest {
     val valueHistory = testObserver.valueHistory()
     assertThat(valueHistory).containsExactly(0, 1, 2, 3, 4)
 
-    testObserver.dispose()
+    viewModel.counterLiveData().removeObserver(testObserver)
     assertThat(viewModel.counterLiveData().hasObservers()).isFalse()
   }
 

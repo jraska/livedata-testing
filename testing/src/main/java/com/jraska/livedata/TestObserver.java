@@ -38,6 +38,7 @@ public final class TestObserver<T> implements Observer<T> {
     return Collections.unmodifiableList(valueHistory);
   }
 
+  @Deprecated // TODO: Add some lovely JavaDoc ;) The feature of remove will be dropped
   public TestObserver<T> dispose() {
     observedLiveData.removeObserver(this);
     return this;
