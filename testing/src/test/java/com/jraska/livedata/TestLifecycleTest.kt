@@ -36,4 +36,14 @@ class TestLifecycleTest {
     testLifecycle.handleLifecycleEvent(ON_RESUME)
     testObserver.assertValue(3)
   }
+
+  @Test
+  fun whenResumed_thenDeliversImmediately() {
+    val testLifecycle = TestLifecycle.createresumed()
+    val testObserver = TestObserver.create<Int>()
+    testLiveData.observe(testLifecycle, testObserver)
+
+    testLiveData.value = 1
+    testObserver.assertValue(1)
+  }
 }

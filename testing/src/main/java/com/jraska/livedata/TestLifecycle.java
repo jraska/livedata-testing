@@ -30,4 +30,8 @@ public final class TestLifecycle implements LifecycleOwner {
   public static TestLifecycle create() {
     return new TestLifecycle();
   }
+
+  public static TestLifecycle createresumed() {
+    return create().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+  }
 }
