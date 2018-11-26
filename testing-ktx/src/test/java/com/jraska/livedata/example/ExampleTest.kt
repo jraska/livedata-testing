@@ -1,6 +1,8 @@
 package com.jraska.livedata.example
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.jraska.livedata.TestLifecycle
+import com.jraska.livedata.TestObserver
 import com.jraska.livedata.test
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -80,8 +82,33 @@ class ExampleTest {
     val valueHistory = testObserver.valueHistory()
     assertThat(valueHistory).containsExactly(0, 1, 2, 3, 4)
 
-    testObserver.dispose()
+    viewModel.counterLiveData().removeObserver(testObserver)
     assertThat(viewModel.counterLiveData().hasObservers()).isFalse()
+  }
+
+  @Test
+  fun useObserverWithLifecycle() {
+    val testObserver = TestObserver.create<Int>()
+    val testLifecycle = TestLifecycle.initialized()
+
+    viewModel.counterLiveData().observe(testLifecycle, testObserver)
+
+    viewModel.plusButtonClicked()
+    viewModel.minusButtonClicked()
+    testObserver.assertNoValue()
+
+    testLifecycle.resume()
+    for (i in 0..3) {
+      viewModel.plusButtonClicked()
+    }
+
+    testObserver.assertHasValue()
+      .assertValue(4)
+      .assertHistorySize(5)
+      .assertNever { value -> value > 4 }
+
+    // Potential remove needs to be handled by you
+    viewModel.counterLiveData().removeObserver(testObserver)
   }
 
   @Test

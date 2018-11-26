@@ -24,7 +24,7 @@ class TestObserverTest {
     assertThat(testObserver.valueHistory()).contains(5, 6)
     testObserver.assertValue(6)
 
-    testObserver.dispose()
+    mutableLiveData.removeObserver(testObserver)
     assertThat(mutableLiveData.hasObservers()).isFalse()
   }
 }
