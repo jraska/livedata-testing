@@ -2,6 +2,7 @@ package com.jraska.livedata.example;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
+import com.jraska.livedata.TestLifecycle;
 import com.jraska.livedata.TestObserver;
 import org.junit.Before;
 import org.junit.Rule;
@@ -77,15 +78,22 @@ public class ExampleJavaTest {
     List<Integer> valueHistory = testObserver.valueHistory();
     assertThat(valueHistory).containsExactly(0, 1, 2, 3, 4);
 
-    testObserver.dispose();
+    liveData.removeObserver(testObserver);
     assertThat(liveData.hasObservers()).isFalse();
   }
 
   @Test
-  public void useObserverByYourself() {
+  public void useObserverWithLifecycle() {
     TestObserver<Integer> testObserver = TestObserver.create();
+    TestLifecycle testLifecycle = TestLifecycle.initialized();
 
-    viewModel.counterLiveData().observeForever(testObserver);
+    viewModel.counterLiveData().observe(testLifecycle, testObserver);
+
+    viewModel.plusButtonClicked();
+    viewModel.minusButtonClicked();
+    testObserver.assertNoValue();
+
+    testLifecycle.resume();
     for (int i = 0; i < 4; i++) {
       viewModel.plusButtonClicked();
     }
