@@ -42,8 +42,8 @@ Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-test
 
 Grab via Gradle:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:0.4.0'
-testImplementation 'com.jraska.livedata:testing-ktx:0.4.0' // If you are Kotlin positive
+testImplementation 'com.jraska.livedata:testing:0.5.0'
+testImplementation 'com.jraska.livedata:testing-ktx:0.5.0' // If you are Kotlin positive
 ```
 
 If you are not using `androidx` namespace yet, please use version 0.2.0. Explanation [here](https://android-developers.googleblog.com/2018/05/hello-world-androidx.html).
