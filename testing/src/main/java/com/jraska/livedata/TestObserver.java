@@ -38,7 +38,14 @@ public final class TestObserver<T> implements Observer<T> {
     return Collections.unmodifiableList(valueHistory);
   }
 
-  @Deprecated // TODO: Add some lovely JavaDoc ;) The feature of remove will be dropped
+  /**
+   * Disposes and removes observer from observed live data.
+   *
+   * @return This Observer
+   *
+   * @deprecated Please use {@link LiveData#removeObserver(Observer)} instead, will be removed in 1.0
+   */
+  @Deprecated
   public TestObserver<T> dispose() {
     observedLiveData.removeObserver(this);
     return this;
