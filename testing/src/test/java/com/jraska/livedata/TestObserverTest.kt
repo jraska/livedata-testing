@@ -106,6 +106,18 @@ class TestObserverTest {
       .assertValue(2)
   }
 
+  @Test
+  fun whenNullValue_thenValueGot() {
+    val testObserver = TestObserver.test(testLiveData)
+    testObserver.assertNoValue()
+
+    testLiveData.value = null
+
+    testObserver.assertHasValue()
+    val value:Int? = testObserver.value()
+    assertThat(value).isNull()
+  }
+
   @Test(expected = AssertionError::class)
   fun hasValuesAssertionFailsOnNoValue() {
     TestObserver.test(testLiveData).assertHasValue()
