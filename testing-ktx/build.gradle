@@ -5,7 +5,6 @@ version = rootProject.ext.version
 
 android {
   compileSdkVersion 28
-  buildToolsVersion '28.0.3'
   defaultConfig {
     minSdkVersion 19
     targetSdkVersion 28
@@ -23,7 +22,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   api project(':testing')
-  implementation 'androidx.annotation:annotation:1.0.0'
+  implementation 'androidx.annotation:annotation:1.0.1'
   implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
   implementation 'androidx.lifecycle:lifecycle-livedata-core:2.0.0'
 
