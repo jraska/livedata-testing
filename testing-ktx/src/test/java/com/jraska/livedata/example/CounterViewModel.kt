@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class CounterViewModel {
   private val counterData = MutableLiveData<Int>()
-  private val labelData = MutableLiveData<String>()
+  private val labelData = MutableLiveData<ScreenData>()
   private val counter = AtomicInteger()
 
   init {
@@ -25,15 +25,19 @@ class CounterViewModel {
     counterData.value = counter.decrementAndGet()
   }
 
-  fun counterLabel(): LiveData<String> {
+  fun counterLabel(): LiveData<ScreenData> {
     return labelData
   }
 
   fun asyncUpdateLabel(label: String) {
     val runnable = Runnable {
       Thread.sleep(10)
-      labelData.postValue(label) }
+      labelData.postValue(ScreenData(Labels(label))) }
 
     Thread(runnable).start()
   }
+
+  class Labels(val counterLabel: String)
+
+  class ScreenData(val labels: Labels)
 }

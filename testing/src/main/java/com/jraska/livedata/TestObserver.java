@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
+  private final List<Observer<T>> childObservers = new ArrayList<>();
+
+  @Deprecated // will be removed in version 1.0
   private final LiveData<T> observedLiveData;
 
   private CountDownLatch valueLatch = new CountDownLatch(1);
@@ -27,6 +30,9 @@ public final class TestObserver<T> implements Observer<T> {
   public void onChanged(@Nullable T value) {
     valueHistory.add(value);
     valueLatch.countDown();
+    for (Observer<T> childObserver : childObservers) {
+      childObserver.onChanged(value);
+    }
   }
 
   public T value() {
@@ -42,7 +48,6 @@ public final class TestObserver<T> implements Observer<T> {
    * Disposes and removes observer from observed live data.
    *
    * @return This Observer
-   *
    * @deprecated Please use {@link LiveData#removeObserver(Observer)} instead, will be removed in 1.0
    */
   @Deprecated
@@ -60,7 +65,11 @@ public final class TestObserver<T> implements Observer<T> {
   }
 
   public TestObserver<T> assertNoValue() {
-    return assertHistorySize(0);
+    if (!valueHistory.isEmpty()) {
+      throw fail("Expected no value, but received: " + value());
+    }
+
+    return this;
   }
 
   public TestObserver<T> assertHistorySize(int expectedSize) {
@@ -109,8 +118,30 @@ public final class TestObserver<T> implements Observer<T> {
   }
 
   /**
-   * Awaits until this TestObserver has any value.
+   * Allows assertion of some mapped value extracted from originally observed values.
+   * History of observed values is retained.
    *
+   * This can became useful when you want to perform assertions on some complex structure and
+   * you want to assert only on one field.
+   *
+   * @param mapper Function to map originally observed value.
+   * @param <N> Type of mapper.
+   * @return TestObserver for mapped value
+   */
+  public <N> TestObserver<N> map(Function<T, N> mapper) {
+    TestObserver<N> newObserver = create();
+    // We want the history match the current one
+    for (T value : valueHistory) {
+      newObserver.onChanged(mapper.apply(value));
+    }
+
+    childObservers.add(value -> newObserver.onChanged(mapper.apply(value)));
+    return newObserver;
+  }
+
+  /**
+   * Awaits until this TestObserver has any value.
+   * <p>
    * If this TestObserver has already value then this method returns immediately.
    *
    * @return this
@@ -123,7 +154,7 @@ public final class TestObserver<T> implements Observer<T> {
 
   /**
    * Awaits the specified amount of time or until this TestObserver has any value.
-   *
+   * <p>
    * If this TestObserver has already value then this method returns immediately.
    *
    * @return this
@@ -136,7 +167,7 @@ public final class TestObserver<T> implements Observer<T> {
 
   /**
    * Awaits until this TestObserver receives next value.
-   *
+   * <p>
    * If this TestObserver has already value then it awaits for another one.
    *
    * @return this
@@ -149,7 +180,7 @@ public final class TestObserver<T> implements Observer<T> {
 
   /**
    * Awaits the specified amount of time or until this TestObserver receives next value.
-   *
+   * <p>
    * If this TestObserver has already value then it awaits for another one.
    *
    * @return this

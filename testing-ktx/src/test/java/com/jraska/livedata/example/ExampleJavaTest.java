@@ -1,9 +1,11 @@
 package com.jraska.livedata.example;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import com.jraska.livedata.TestLifecycle;
 import com.jraska.livedata.TestObserver;
+import com.jraska.livedata.example.CounterViewModel.ScreenData;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -109,9 +111,10 @@ public class ExampleJavaTest {
 
   @Test
   public void awaitAsyncValue() throws InterruptedException {
-    LiveData<String> labelData = viewModel.counterLabel();
+    LiveData<ScreenData> labelData = viewModel.counterLabel();
 
     TestObserver<String> testObserver = TestObserver.test(labelData)
+      .map(input -> input.getLabels().getCounterLabel())
       .assertNoValue();
 
     viewModel.asyncUpdateLabel("initial");
