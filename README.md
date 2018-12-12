@@ -23,6 +23,11 @@ liveData.test()
   .assertValue(4)
   .assertHistorySize(5)
   .assertNever { it > 4 }
+
+
+// Assertion on structures with a lot of nesting
+viewLiveData.map { it.items[0].header.title }
+  .assertValue("Expected title")
 ```
 
 Java - see [ExampleTest.java](https://github.com/jraska/livedata-testing/blob/master/testing-ktx/src/test/java/com/jraska/livedata/example/ExampleJavaTest.java)

@@ -126,6 +126,7 @@ class ExampleTest {
     viewModel.asyncUpdateLabel("different")
 
     testObserver
+      .map {it.labels.counterLabel}
       .assertValue("initial")
       .awaitNextValue()
       .assertValue("different")

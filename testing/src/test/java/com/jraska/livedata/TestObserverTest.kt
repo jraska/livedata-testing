@@ -114,8 +114,20 @@ class TestObserverTest {
     testLiveData.value = null
 
     testObserver.assertHasValue()
-    val value:Int? = testObserver.value()
+    val value: Int? = testObserver.value()
     assertThat(value).isNull()
+  }
+
+  @Test
+  fun whenMap_mapsProperly() {
+    val testObserver = TestObserver.test(testLiveData).map { it * 2 }
+    testObserver.assertNoValue()
+
+    testLiveData.value = 1
+    testLiveData.value = 2
+
+    testObserver.assertValue(4)
+    testObserver.map { it.toString() }.assertValue("4")
   }
 
   @Test(expected = AssertionError::class)
