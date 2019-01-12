@@ -119,6 +119,20 @@ class TestObserverTest {
   }
 
   @Test
+  fun whenNullValueInMiddleOfList_thenValueGot() {
+    val testObserver = TestObserver.test(testLiveData)
+    testObserver.assertNoValue()
+
+    testLiveData.value = 1
+    testLiveData.value = null
+    testLiveData.value = 2
+
+    testObserver.assertHasValue()
+    val value: Int? = testObserver.valueHistory()[1]
+    assertThat(value).isNull()
+  }
+
+  @Test
   fun whenMap_mapsProperly() {
     val testObserver = TestObserver.test(testLiveData).map { it * 2 }
     testObserver.assertNoValue()

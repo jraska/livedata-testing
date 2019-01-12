@@ -35,11 +35,21 @@ public final class TestObserver<T> implements Observer<T> {
     }
   }
 
+  /**
+   * Returns a last received value. Fails if no value was received yet.
+   *
+   * @return a last received value
+   */
   public T value() {
     assertHasValue();
     return valueHistory.get(valueHistory.size() - 1);
   }
 
+  /**
+   * Returns a unmodifiable list of received values.
+   *
+   * @return a list of received values
+   */
   public List<T> valueHistory() {
     return Collections.unmodifiableList(valueHistory);
   }
@@ -56,6 +66,11 @@ public final class TestObserver<T> implements Observer<T> {
     return this;
   }
 
+  /**
+   * Assert that this TestObserver received at least one value.
+   *
+   * @return this
+   */
   public TestObserver<T> assertHasValue() {
     if (valueHistory.isEmpty()) {
       throw fail("Observer never received any value");
@@ -64,6 +79,11 @@ public final class TestObserver<T> implements Observer<T> {
     return this;
   }
 
+  /**
+   * Assert that this TestObserver never received any value.
+   *
+   * @return this
+   */
   public TestObserver<T> assertNoValue() {
     if (!valueHistory.isEmpty()) {
       throw fail("Expected no value, but received: " + value());
@@ -72,6 +92,12 @@ public final class TestObserver<T> implements Observer<T> {
     return this;
   }
 
+  /**
+   * Assert that this TestObserver received the specified number of values.
+   *
+   * @param expectedSize the expected number of received values
+   * @return this
+   */
   public TestObserver<T> assertHistorySize(int expectedSize) {
     int size = valueHistory.size();
     if (size != expectedSize) {
@@ -80,6 +106,13 @@ public final class TestObserver<T> implements Observer<T> {
     return this;
   }
 
+  /**
+   * Assert that this TestObserver last received value is equal to
+   * the given value.
+   *
+   * @param expected the value to expect being equal to last value, can be null
+   * @return this
+   */
   public TestObserver<T> assertValue(T expected) {
     T value = value();
 
@@ -94,6 +127,14 @@ public final class TestObserver<T> implements Observer<T> {
     return this;
   }
 
+  /**
+   * Asserts that for this TestObserver last received value
+   * the provided predicate returns true.
+   *
+   * @param valuePredicate the predicate that receives the observed value
+   *                       and should return true for the expected value.
+   * @return this
+   */
   public TestObserver<T> assertValue(Function<T, Boolean> valuePredicate) {
     T value = value();
 
@@ -104,6 +145,14 @@ public final class TestObserver<T> implements Observer<T> {
     return this;
   }
 
+  /**
+   * Asserts that this TestObserver did not receive any value for which
+   * the provided predicate returns true.
+   *
+   * @param valuePredicate the predicate that receives the observed values
+   *                       and should return true for the value not supposed to be received.
+   * @return this
+   */
   public TestObserver<T> assertNever(Function<T, Boolean> valuePredicate) {
     int size = valueHistory.size();
     for (int valueIndex = 0; valueIndex < size; valueIndex++) {
@@ -120,12 +169,12 @@ public final class TestObserver<T> implements Observer<T> {
   /**
    * Allows assertion of some mapped value extracted from originally observed values.
    * History of observed values is retained.
-   *
+   * <p>
    * This can became useful when you want to perform assertions on some complex structure and
    * you want to assert only on one field.
    *
    * @param mapper Function to map originally observed value.
-   * @param <N> Type of mapper.
+   * @param <N>    Type of mapper.
    * @return TestObserver for mapped value
    */
   public <N> TestObserver<N> map(Function<T, N> mapper) {
