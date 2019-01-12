@@ -37,5 +37,14 @@ install {
         }
       }
     }
+
+    // Publish only compile dependencies,
+    // because by default all scopes including test ones
+    // are pulled by transitive dependencies without this code
+    pom.whenConfigured {
+      p -> p.dependencies = p.dependencies.findAll {
+        dep -> dep.scope == "compile"
+      }
+    }
   }
 }
