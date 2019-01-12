@@ -16,14 +16,9 @@ import java.util.concurrent.TimeUnit;
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
   private final List<Observer<T>> childObservers = new ArrayList<>();
-
-  @Deprecated // will be removed in version 1.0
-  private final LiveData<T> observedLiveData;
-
   private CountDownLatch valueLatch = new CountDownLatch(1);
 
-  private TestObserver(LiveData<T> observedLiveData) {
-    this.observedLiveData = observedLiveData;
+  private TestObserver() {
   }
 
   @Override
@@ -52,18 +47,6 @@ public final class TestObserver<T> implements Observer<T> {
    */
   public List<T> valueHistory() {
     return Collections.unmodifiableList(valueHistory);
-  }
-
-  /**
-   * Disposes and removes observer from observed live data.
-   *
-   * @return This Observer
-   * @deprecated Please use {@link LiveData#removeObserver(Observer)} instead, will be removed in 1.0
-   */
-  @Deprecated
-  public TestObserver<T> dispose() {
-    observedLiveData.removeObserver(this);
-    return this;
   }
 
   /**
@@ -256,11 +239,11 @@ public final class TestObserver<T> implements Observer<T> {
   }
 
   public static <T> TestObserver<T> create() {
-    return new TestObserver<>(new MutableLiveData<>());
+    return new TestObserver<>();
   }
 
   public static <T> TestObserver<T> test(LiveData<T> liveData) {
-    TestObserver<T> observer = new TestObserver<>(liveData);
+    TestObserver<T> observer = new TestObserver<>();
     liveData.observeForever(observer);
     return observer;
   }

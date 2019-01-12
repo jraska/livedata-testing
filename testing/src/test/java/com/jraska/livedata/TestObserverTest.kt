@@ -13,15 +13,6 @@ class TestObserverTest {
   private val testLiveData = MutableLiveData<Int>()
 
   @Test
-  fun whenDisposes_thenNoObservers() {
-    val testObserver = TestObserver.test(testLiveData)
-
-    assertThat(testLiveData.hasObservers()).isTrue()
-    testObserver.dispose()
-    assertThat(testLiveData.hasObservers()).isFalse()
-  }
-
-  @Test
   fun whenValuesPublished_thenHistoryRetained() {
     testLiveData.value = 1
     testLiveData.value = 2
