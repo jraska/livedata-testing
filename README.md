@@ -9,6 +9,6 @@ TestObserver to easily test LiveData and make assertions on them.
 
 Grab via Gradle:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:0.2.0'
-testImplementation 'com.jraska.livedata:testing-ktx:0.2.0' // If you are Kotlin positive
+testImplementation 'com.jraska.livedata:testing:0.2.1'
+testImplementation 'com.jraska.livedata:testing-ktx:0.2.1' // If you are Kotlin positive
 ```
