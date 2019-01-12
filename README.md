@@ -45,13 +45,12 @@ Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-test
 
 ## Download
 
-Grab via Gradle:
-Kotlin users:
+##### Kotlin users:
 ```groovy
 testImplementation 'com.jraska.livedata:testing-ktx:1.0.0'
 ```
 
-Java users:
+##### Java users:
 ```groovy
 testImplementation 'com.jraska.livedata:testing:1.0.0'
 ```
