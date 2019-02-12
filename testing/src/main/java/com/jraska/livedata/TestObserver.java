@@ -1,10 +1,9 @@
 package com.jraska.livedata;
 
-
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
-  private final List<Observer<T>> childObservers = new ArrayList<>();
+  private final List<Consumer<TestObserver<T>>> onChangedConsumers = new ArrayList<>();
   private CountDownLatch valueLatch = new CountDownLatch(1);
 
   private TestObserver() {
@@ -25,8 +24,9 @@ public final class TestObserver<T> implements Observer<T> {
   public void onChanged(@Nullable T value) {
     valueHistory.add(value);
     valueLatch.countDown();
-    for (Observer<T> childObserver : childObservers) {
-      childObserver.onChanged(value);
+
+    for (Consumer<TestObserver<T>> consumer : onChangedConsumers) {
+      consumer.accept(this);
     }
   }
 
@@ -167,8 +167,14 @@ public final class TestObserver<T> implements Observer<T> {
       newObserver.onChanged(mapper.apply(value));
     }
 
-    childObservers.add(value -> newObserver.onChanged(mapper.apply(value)));
+    onValueChanged(observer -> newObserver.onChanged(mapper.apply(observer.value())));
+
     return newObserver;
+  }
+
+  public TestObserver<T> onValueChanged(Consumer<TestObserver<T>> onObserverValue) {
+    onChangedConsumers.add(onObserverValue);
+    return this;
   }
 
   /**
