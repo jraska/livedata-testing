@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
-  private final List<Consumer<TestObserver<T>>> onChangedConsumers = new ArrayList<>();
+  private final List<Consumer<T>> onChangedConsumers = new ArrayList<>();
   private CountDownLatch valueLatch = new CountDownLatch(1);
 
   private TestObserver() {
@@ -25,8 +25,8 @@ public final class TestObserver<T> implements Observer<T> {
     valueHistory.add(value);
     valueLatch.countDown();
 
-    for (Consumer<TestObserver<T>> consumer : onChangedConsumers) {
-      consumer.accept(this);
+    for (Consumer<T> consumer : onChangedConsumers) {
+      consumer.accept(value);
     }
   }
 
@@ -167,12 +167,18 @@ public final class TestObserver<T> implements Observer<T> {
       newObserver.onChanged(mapper.apply(value));
     }
 
-    onValueChanged(observer -> newObserver.onChanged(mapper.apply(observer.value())));
+    onValueChanged(new Map<>(newObserver, mapper));
 
     return newObserver;
   }
 
-  public TestObserver<T> onValueChanged(Consumer<TestObserver<T>> onObserverValue) {
+  /**
+   * Adds a Consumer which will be triggered on each value change to allow assertion on the value.
+   *
+   * @param onObserverValue Consumer to call when new value is received
+   * @return this
+   */
+  public TestObserver<T> onValueChanged(Consumer<T> onObserverValue) {
     onChangedConsumers.add(onObserverValue);
     return this;
   }
@@ -252,5 +258,19 @@ public final class TestObserver<T> implements Observer<T> {
     TestObserver<T> observer = new TestObserver<>();
     liveData.observeForever(observer);
     return observer;
+  }
+
+  static final class Map<T, N> implements Consumer<T> {
+    private final TestObserver<N> newObserver;
+    private final Function<T, N> mapper;
+
+    Map(TestObserver<N> newObserver, Function<T, N> mapper) {
+      this.newObserver = newObserver;
+      this.mapper = mapper;
+    }
+
+    @Override public void accept(T value) {
+      newObserver.onChanged(mapper.apply(value));
+    }
   }
 }
