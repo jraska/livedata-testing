@@ -1,10 +1,9 @@
 package com.jraska.livedata;
 
-
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
-  private final List<Observer<T>> childObservers = new ArrayList<>();
+  private final List<Consumer<T>> onChanged = new ArrayList<>();
   private CountDownLatch valueLatch = new CountDownLatch(1);
 
   private TestObserver() {
@@ -25,8 +24,9 @@ public final class TestObserver<T> implements Observer<T> {
   public void onChanged(@Nullable T value) {
     valueHistory.add(value);
     valueLatch.countDown();
-    for (Observer<T> childObserver : childObservers) {
-      childObserver.onChanged(value);
+
+    for (Consumer<T> consumer : onChanged) {
+      consumer.accept(value);
     }
   }
 
@@ -167,8 +167,20 @@ public final class TestObserver<T> implements Observer<T> {
       newObserver.onChanged(mapper.apply(value));
     }
 
-    childObservers.add(value -> newObserver.onChanged(mapper.apply(value)));
+    doOnChanged(new Map<>(newObserver, mapper));
+
     return newObserver;
+  }
+
+  /**
+   * Adds a Consumer which will be triggered on each value change to allow assertion on the value.
+   *
+   * @param onChanged Consumer to call when new value is received
+   * @return this
+   */
+  public TestObserver<T> doOnChanged(Consumer<T> onChanged) {
+    this.onChanged.add(onChanged);
+    return this;
   }
 
   /**
@@ -246,5 +258,19 @@ public final class TestObserver<T> implements Observer<T> {
     TestObserver<T> observer = new TestObserver<>();
     liveData.observeForever(observer);
     return observer;
+  }
+
+  static final class Map<T, N> implements Consumer<T> {
+    private final TestObserver<N> newObserver;
+    private final Function<T, N> mapper;
+
+    Map(TestObserver<N> newObserver, Function<T, N> mapper) {
+      this.newObserver = newObserver;
+      this.mapper = mapper;
+    }
+
+    @Override public void accept(T value) {
+      newObserver.onChanged(mapper.apply(value));
+    }
   }
 }

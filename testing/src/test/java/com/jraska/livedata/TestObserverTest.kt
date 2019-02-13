@@ -3,9 +3,11 @@ package com.jraska.livedata
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.ComparisonFailure
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 class TestObserverTest {
   @get:Rule val testRule = InstantTaskExecutorRule()
@@ -135,6 +137,22 @@ class TestObserverTest {
     testObserver.map { it.toString() }.assertValue("4")
   }
 
+  @Test
+  fun whenOnValueChanged_thenTriggersProperly() {
+    val triggeredCount = AtomicInteger()
+
+    TestObserver.test(testLiveData)
+      .map { it * 2 }
+      .doOnChanged { triggeredCount.incrementAndGet() }
+
+    val expectedTriggerCount = 10
+    repeat(expectedTriggerCount) {
+      testLiveData.value = 123456
+    }
+
+    assertThat(triggeredCount.get()).isEqualTo(expectedTriggerCount)
+  }
+
   @Test(expected = AssertionError::class)
   fun hasValuesAssertionFailsOnNoValue() {
     TestObserver.test(testLiveData).assertHasValue()
@@ -176,6 +194,15 @@ class TestObserverTest {
     testLiveData.value = 5
 
     testObserver.assertNever { it == 4 }
+  }
+
+  @Test(expected = ComparisonFailure::class)
+  fun whenOnValueChanged_thenFailsProperly() {
+    TestObserver.test(testLiveData)
+      .map { it * 2 }
+      .doOnChanged { assertThat(it).isEqualTo(1) }
+
+    testLiveData.value = 1
   }
 
   private fun setValueAsOne() = Runnable {
