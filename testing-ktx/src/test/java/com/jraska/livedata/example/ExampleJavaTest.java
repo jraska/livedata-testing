@@ -1,7 +1,6 @@
 package com.jraska.livedata.example;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import com.jraska.livedata.TestLifecycle;
 import com.jraska.livedata.TestObserver;
@@ -31,6 +30,7 @@ public class ExampleJavaTest {
     TestObserver.test(liveData)
       .assertHasValue()
       .assertHistorySize(1)
+      .doOnChanged(value -> assertThat(value).isPositive())
       .assertNever(value -> value > 0);
 
     for (int i = 0; i < 4; i++) {

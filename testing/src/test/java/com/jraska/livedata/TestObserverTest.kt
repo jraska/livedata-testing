@@ -143,7 +143,7 @@ class TestObserverTest {
 
     TestObserver.test(testLiveData)
       .map { it * 2 }
-      .onValueChanged { triggeredCount.incrementAndGet() }
+      .doOnChanged { triggeredCount.incrementAndGet() }
 
     val expectedTriggerCount = 10
     repeat(expectedTriggerCount) {
@@ -200,7 +200,7 @@ class TestObserverTest {
   fun whenOnValueChanged_thenFailsProperly() {
     TestObserver.test(testLiveData)
       .map { it * 2 }
-      .onValueChanged { assertThat(it).isEqualTo(1) }
+      .doOnChanged { assertThat(it).isEqualTo(1) }
 
     testLiveData.value = 1
   }

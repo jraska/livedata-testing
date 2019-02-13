@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class TestObserver<T> implements Observer<T> {
   private final List<T> valueHistory = new ArrayList<>();
-  private final List<Consumer<T>> onChangedConsumers = new ArrayList<>();
+  private final List<Consumer<T>> onChanged = new ArrayList<>();
   private CountDownLatch valueLatch = new CountDownLatch(1);
 
   private TestObserver() {
@@ -25,7 +25,7 @@ public final class TestObserver<T> implements Observer<T> {
     valueHistory.add(value);
     valueLatch.countDown();
 
-    for (Consumer<T> consumer : onChangedConsumers) {
+    for (Consumer<T> consumer : onChanged) {
       consumer.accept(value);
     }
   }
@@ -167,7 +167,7 @@ public final class TestObserver<T> implements Observer<T> {
       newObserver.onChanged(mapper.apply(value));
     }
 
-    onValueChanged(new Map<>(newObserver, mapper));
+    doOnChanged(new Map<>(newObserver, mapper));
 
     return newObserver;
   }
@@ -175,11 +175,11 @@ public final class TestObserver<T> implements Observer<T> {
   /**
    * Adds a Consumer which will be triggered on each value change to allow assertion on the value.
    *
-   * @param onObserverValue Consumer to call when new value is received
+   * @param onChanged Consumer to call when new value is received
    * @return this
    */
-  public TestObserver<T> onValueChanged(Consumer<T> onObserverValue) {
-    onChangedConsumers.add(onObserverValue);
+  public TestObserver<T> doOnChanged(Consumer<T> onChanged) {
+    this.onChanged.add(onChanged);
     return this;
   }
 
