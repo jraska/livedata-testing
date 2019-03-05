@@ -120,7 +120,8 @@ public final class TestObserver<T> implements Observer<T> {
     T value = value();
 
     if (!valuePredicate.apply(value)) {
-      throw fail("Value not present");
+      throw fail("Value " + valueAndClass(value) + " does not match the predicate "
+        + valuePredicate.toString() + ".");
     }
 
     return this;
