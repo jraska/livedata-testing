@@ -1,5 +1,6 @@
 package com.jraska.livedata;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.core.util.Consumer;
@@ -7,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -99,11 +101,7 @@ public final class TestObserver<T> implements Observer<T> {
   public TestObserver<T> assertValue(T expected) {
     T value = value();
 
-    if (expected == null && value == null) {
-      return this;
-    }
-
-    if (!value.equals(expected)) {
+    if (notEquals(value, expected)) {
       throw fail("Expected: " + valueAndClass(expected) + ", Actual: " + valueAndClass(value));
     }
 
@@ -118,11 +116,37 @@ public final class TestObserver<T> implements Observer<T> {
    *                       and should return true for the expected value.
    * @return this
    */
-  public TestObserver<T> assertValue(Function<T, Boolean> valuePredicate) {
+  public TestObserver<T> assertValue(@NonNull Function<T, Boolean> valuePredicate) {
     T value = value();
 
     if (!valuePredicate.apply(value)) {
       throw fail("Value not present");
+    }
+
+    return this;
+  }
+
+  /**
+   * Asserts that the TestObserver received only the specified values in the specified order.
+   *
+   * @param values the values expected
+   * @return this
+   */
+  @SuppressWarnings("unchecked")
+  public TestObserver<T> assertValueHistory(T... values) {
+    List<T> valueHistory = valueHistory();
+    int size = valueHistory.size();
+    if (size != values.length) {
+      throw fail("Value count differs; expected: " + values.length + " " + Arrays.toString(values)
+        + " but was: " + size + " " + this.valueHistory);
+    }
+
+    for (int valueIndex = 0; valueIndex < size; valueIndex++) {
+      T historyItem = valueHistory.get(valueIndex);
+      T expectedItem = values[valueIndex];
+      if (notEquals(expectedItem, historyItem)) {
+        throw fail("Values at position " + valueIndex + " differ; expected: " + valueAndClass(expectedItem) + " but was: " + valueAndClass(historyItem));
+      }
     }
 
     return this;
@@ -241,6 +265,10 @@ public final class TestObserver<T> implements Observer<T> {
 
   private AssertionError fail(String message) {
     return new AssertionError(message);
+  }
+
+  private static boolean notEquals(Object o1, Object o2) {
+    return o1 != o2 && (o1 == null || !o1.equals(o2));
   }
 
   private static String valueAndClass(Object value) {

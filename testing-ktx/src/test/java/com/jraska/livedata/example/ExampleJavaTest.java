@@ -62,6 +62,7 @@ public class ExampleJavaTest {
       .assertValue(value -> value > 3)
       .assertValue(4)
       .assertHistorySize(5)
+      .assertValueHistory(0, 1, 2, 3, 4)
       .assertNever(value -> value > 4);
   }
 
@@ -76,9 +77,6 @@ public class ExampleJavaTest {
 
     Integer value = testObserver.value();
     assertThat(value).isEqualTo(4);
-
-    List<Integer> valueHistory = testObserver.valueHistory();
-    assertThat(valueHistory).containsExactly(0, 1, 2, 3, 4);
 
     liveData.removeObserver(testObserver);
     assertThat(liveData.hasObservers()).isFalse();

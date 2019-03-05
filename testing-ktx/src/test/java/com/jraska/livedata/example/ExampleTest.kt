@@ -56,6 +56,7 @@ class ExampleTest {
       .assertValue { it > 3 }
       .assertValue(4)
       .assertHistorySize(5)
+      .assertValueHistory(0, 1, 2, 3, 4)
       .assertNever { it > 4 }
 
     for (i in 1..4) {
@@ -64,6 +65,7 @@ class ExampleTest {
 
     testObserver.assertHasValue()
       .assertHistorySize(9)
+      .assertValueHistory(0, 1, 2, 3, 4, 3, 2, 1, 0)
       .assertValue(0)
       .assertNever { it > 4 }
   }
@@ -126,7 +128,7 @@ class ExampleTest {
     viewModel.asyncUpdateLabel("different")
 
     testObserver
-      .map {it.labels.counterLabel}
+      .map { it.labels.counterLabel }
       .assertValue("initial")
       .awaitNextValue()
       .assertValue("different")
