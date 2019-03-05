@@ -28,6 +28,8 @@ class TestObserverTest {
     }
 
     testObserver.assertHistorySize(4)
+      .assertValueHistory(2, 3, 4, 5)
+
     assertThat(testObserver.valueHistory()).containsExactly(2, 3, 4, 5)
   }
 
@@ -61,6 +63,7 @@ class TestObserverTest {
       .assertValue(4)
       .assertValue { it == 4 }
       .assertValue { it > 3 }
+      .assertValueHistory(3, 4)
       .value()
 
     assertThat(value).isEqualTo(4)
@@ -203,6 +206,26 @@ class TestObserverTest {
       .doOnChanged { assertThat(it).isEqualTo(1) }
 
     testLiveData.value = 1
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertingValuesFailsOnDifferentSize() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.value = 4
+    testLiveData.value = 5
+
+    testObserver.assertValueHistory(4)
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertingValuesFailsOnDifferentValues() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.value = 4
+    testLiveData.value = 5
+
+    testObserver.assertValueHistory(4, 4)
   }
 
   private fun setValueAsOne() = Runnable {
