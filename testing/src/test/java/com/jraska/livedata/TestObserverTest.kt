@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 class TestObserverTest {
-  @get:Rule val testRule = InstantTaskExecutorRule()
+  @get:Rule
+  val testRule = InstantTaskExecutorRule()
 
   private val testLiveData = MutableLiveData<Int>()
 
@@ -31,6 +32,94 @@ class TestObserverTest {
       .assertValueHistory(2, 3, 4, 5)
 
     assertThat(testObserver.valueHistory()).containsExactly(2, 3, 4, 5)
+  }
+
+  @Test
+  fun assertValueHistoryAt() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.apply {
+      value = 1
+      value = null
+      value = 3
+    }
+
+    testObserver.assertHistorySize(3)
+      .assertValueHistoryAt(0, 1)
+      .assertValueHistoryAt(1, null)
+      .assertValueHistoryAt(2, 3)
+
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertValueHistoryAt_failsOnOtherValue() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.value = 1
+
+    testObserver.assertValueHistoryAt(0, 2)
+
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertValueHistoryAt_failNoValues() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testObserver.assertValueHistoryAt(0, 1)
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertValueHistoryAt_failInvalidIndex() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.value = 1
+
+    testObserver.assertValueHistory(1)
+      .assertValueHistoryAt(1, 1)
+  }
+
+  @Test
+  fun assertValueHistoryAt_valuePredicate() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.apply {
+      value = 1
+      value = null
+      value = 3
+    }
+
+    testObserver.assertHistorySize(3)
+      .assertValueHistoryAt(0) { it == 1 }
+      .assertValueHistoryAt(1) { it == null }
+      .assertValueHistoryAt(2) { it == 3 }
+
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertValueHistoryAt_valuePredicate_failsOnOtherValue() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.value = 1
+
+    testObserver.assertValueHistoryAt(0) { it == 2 }
+
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertValueHistoryAt_valuePredicate_failNoValues() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testObserver.assertValueHistoryAt(0) { it == 1 }
+  }
+
+  @Test(expected = AssertionError::class)
+  fun assertValueHistoryAt_valuePredicate_failInvalidIndex() {
+    val testObserver = TestObserver.test(testLiveData)
+
+    testLiveData.value = 1
+
+    testObserver.assertValueHistory(1)
+      .assertValueHistoryAt(1) { it == 1 }
   }
 
   @Test

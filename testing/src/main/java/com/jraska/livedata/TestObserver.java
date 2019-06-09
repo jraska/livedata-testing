@@ -154,6 +154,60 @@ public final class TestObserver<T> implements Observer<T> {
   }
 
   /**
+   * Assert that this TestObserver at a specific history index is equal to
+   * the given value.
+   *
+   * @param expected the value to expect being equal to last value, can be null
+   * @return this
+   */
+  public TestObserver<T> assertValueHistoryAt(int index, T expected) {
+    int s = valueHistory.size();
+
+    if (s == 0) {
+      throw fail("No values");
+    }
+
+    if (index >= valueHistory.size()) {
+      throw fail("Invalide index" + index);
+    }
+
+    T value = valueHistory.get(index);
+
+    if (notEquals(value, expected)) {
+      throw fail("Expected: " + valueAndClass(expected) + ", Actual: " + valueAndClass(value));
+    }
+
+    return this;
+  }
+
+  /**
+   * Asserts that for this TestObserver value at a specific history index
+   * the provided predicate returns true.
+   *
+   * @param valuePredicate the predicate that receives the observed value
+   *                       and should return true for the expected value.
+   * @return this
+   */
+  public TestObserver<T> assertValueHistoryAt(int index, @NonNull Function<T, Boolean> valuePredicate) {
+    int s = valueHistory.size();
+
+    if (s == 0) {
+      throw fail("No values");
+    }
+
+    if (index >= valueHistory.size()) {
+      throw fail("Invalid index" + index);
+    }
+
+    if (!valuePredicate.apply(valueHistory.get(index))) {
+      throw fail("Value " + valueAndClass(valueHistory.get(index)) + " does not match the predicate "
+        + valuePredicate.toString() + ".");
+    }
+
+    return this;
+  }
+
+  /**
    * Asserts that this TestObserver did not receive any value for which
    * the provided predicate returns true.
    *
@@ -298,7 +352,8 @@ public final class TestObserver<T> implements Observer<T> {
       this.mapper = mapper;
     }
 
-    @Override public void accept(T value) {
+    @Override
+    public void accept(T value) {
       newObserver.onChanged(mapper.apply(value));
     }
   }
