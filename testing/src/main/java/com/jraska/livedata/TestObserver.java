@@ -78,6 +78,20 @@ public final class TestObserver<T> implements Observer<T> {
   }
 
   /**
+   * Assert that this TestObserver received null value
+   *
+   * @return this
+   */
+  public TestObserver<T> assertNullValue() {
+    T value = value();
+
+    if (value != null) {
+      throw fail("Value " + valueAndClass(value) + " does not null");
+    }
+    return this;
+  }
+
+  /**
    * Assert that this TestObserver received the specified number of values.
    *
    * @param expectedSize the expected number of received values
@@ -298,7 +312,8 @@ public final class TestObserver<T> implements Observer<T> {
       this.mapper = mapper;
     }
 
-    @Override public void accept(T value) {
+    @Override
+    public void accept(T value) {
       newObserver.onChanged(mapper.apply(value));
     }
   }
