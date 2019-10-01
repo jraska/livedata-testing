@@ -86,7 +86,7 @@ public final class TestObserver<T> implements Observer<T> {
     T value = value();
 
     if (value != null) {
-      throw fail("Value " + valueAndClass(value) + " does not null");
+      throw fail("Value " + valueAndClass(value) + " is not null");
     }
     return this;
   }
