@@ -78,7 +78,7 @@ public final class TestObserver<T> implements Observer<T> {
   }
 
   /**
-   * Assert that this TestObserver received null value
+   * Assert that this TestObserver last received value was null
    *
    * @return this
    */
