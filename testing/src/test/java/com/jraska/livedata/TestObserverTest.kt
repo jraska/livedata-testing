@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 class TestObserverTest {
-  @get:Rule val testRule = InstantTaskExecutorRule()
+  @get:Rule
+  val testRule = InstantTaskExecutorRule()
 
   private val testLiveData = MutableLiveData<Int>()
 
@@ -112,6 +113,16 @@ class TestObserverTest {
     testObserver.assertHasValue()
     val value: Int? = testObserver.value()
     assertThat(value).isNull()
+  }
+
+  @Test
+  fun whenNullValue_checkNull() {
+    val testObserver = TestObserver.test(testLiveData)
+    testObserver.assertNoValue()
+
+    testLiveData.value = null
+
+    testObserver.assertNullValue()
   }
 
   @Test
