@@ -22,13 +22,13 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   api project(':testing')
-  implementation 'androidx.annotation:annotation:1.0.2'
-  implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.0.0'
+  implementation 'androidx.annotation:annotation:1.1.0'
+  implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.1.0'
 
   testImplementation 'junit:junit:4.12'
-  testImplementation 'androidx.arch.core:core-testing:2.0.0'
-  testImplementation 'org.assertj:assertj-core:3.11.1'
+  testImplementation 'androidx.arch.core:core-testing:2.1.0'
+  testImplementation 'org.assertj:assertj-core:3.13.2'
 }
 
 ext {

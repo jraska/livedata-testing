@@ -117,12 +117,13 @@ class TestObserverTest {
 
   @Test
   fun whenNullValue_checkNull() {
-    val testObserver = TestObserver.test(testLiveData)
+    val testObserver: TestObserver<Int?> = TestObserver.test(testLiveData)
     testObserver.assertNoValue()
 
     testLiveData.value = null
 
     testObserver.assertNullValue()
+    assertThat(testObserver.valueHistory()[0]).isNull()
   }
 
   @Test
