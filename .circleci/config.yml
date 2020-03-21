@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-28-alpha
+      - image: circleci/android:api-29-alpha
     environment:
       JVM_OPTS: -Xmx4096m
     steps:
@@ -19,7 +19,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "testing-ktx/build.gradle" }}
       - run:
           name: Run Tests
-          command: ./gradlew lint test
+          command: ./gradlew check
       - store_artifacts:
           path: testing/build/reports
           destination: testing/reports
