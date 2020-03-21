@@ -47,16 +47,13 @@ Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-test
 
 ##### Kotlin users:
 ```groovy
-testImplementation 'com.jraska.livedata:testing-ktx:1.1.1'
+testImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
 ```
 
 ##### Java users:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:1.1.1'
+testImplementation 'com.jraska.livedata:testing:1.1.2'
 ```
-
-If you are not using `androidx` namespace yet, please use version `0.2.1`. Explanation [here](https://android-developers.googleblog.com/2018/05/hello-world-androidx.html).
-
 
 ## Philosophy
 
