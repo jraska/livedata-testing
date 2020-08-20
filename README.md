@@ -55,7 +55,7 @@ testImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
 testImplementation 'com.jraska.livedata:testing:1.1.2'
 ```
 
-## Philosophy
+## [Philosophy](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4)
 
 This library is created in a belief that to effective and valuable test should be fast to write and model real code usage.
 As by Architecture components spec Activity should communicate with its ViewModel only through observing LiveData.
