@@ -24,7 +24,7 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-livedata-core:2.2.0'
 
   testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  testImplementation 'junit:junit:4.13'
+  testImplementation 'junit:junit:4.13.1'
   testImplementation 'androidx.arch.core:core-testing:2.1.0'
   testImplementation 'org.assertj:assertj-core:3.17.2'
 }
