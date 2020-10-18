@@ -4,10 +4,10 @@ apply plugin: 'kotlin-android'
 version = rootProject.ext.version
 
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
   defaultConfig {
     minSdkVersion 19
-    targetSdkVersion 29
+    targetSdkVersion 30
     versionName version
     versionCode rootProject.ext.versionCode
   }
