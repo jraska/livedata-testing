@@ -4,10 +4,11 @@ buildscript {
   ext.kotlin_version = '1.5.0'
   repositories {
     google()
-    jcenter()
+    mavenCentral()
+    jcenter() // needed for the bintray plugin - will be removed after we migrate to Maven publishing
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:4.1.3'
+    classpath 'com.android.tools.build:gradle:4.2.0'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
@@ -17,7 +18,7 @@ buildscript {
 allprojects {
   repositories {
     google()
-    jcenter()
+    mavenCentral()
   }
 }
 
