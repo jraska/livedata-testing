@@ -27,8 +27,8 @@ task clean(type: Delete) {
 }
 
 ext {
-  version = '1.1.2'
-  versionCode = 13
+  version = '1.2.0'
+  versionCode = 14
 }
 
 nexusPublishing {

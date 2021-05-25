@@ -1,6 +1,3 @@
-### JCenter Update
-- LiveData Testing is currently published on JCenter - it will serve packages [until February 1st, 2022](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/). LiveData Testing packages will be migrated to Maven Central before that - [see issue](https://github.com/jraska/livedata-testing/issues/78). Thanks for using LiveData Testing! :) 
-
 # LiveData Testing
 TestObserver to easily test LiveData and make assertions on them.
 
@@ -50,12 +47,12 @@ Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-test
 
 ##### Kotlin users:
 ```groovy
-testImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
+testImplementation 'com.jraska.livedata:testing-ktx:1.2.0'
 ```
 
 ##### Java users:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:1.1.2'
+testImplementation 'com.jraska.livedata:testing:1.2.0'
 ```
 
 ## [Philosophy](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4)
