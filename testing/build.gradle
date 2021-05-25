@@ -1,7 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 version = rootProject.ext.version
+group = 'com.jraska.livedata'
 
 android {
   compileSdkVersion 30
@@ -29,28 +32,59 @@ dependencies {
   testImplementation 'org.assertj:assertj-core:3.19.0'
 }
 
-ext {
-  bintrayRepo = 'maven'
-  bintrayName = 'com.jraska.livedata:testing'
-
-  publishedGroupId = 'com.jraska.livedata'
-  libraryName = 'testing'
-  artifact = 'testing'
-
-  libraryDescription = 'LiveData Testing'
-
-  siteUrl = 'https://github.com/jraska/livedata-testing'
-  gitUrl = 'https://github.com/jraska/livedata-testing.git'
-
-  libraryVersion = version
-
-  developerId = 'jraska'
-  developerName = 'Josef Raska'
-
-  licenseName = 'The Apache Software License, Version 2.0'
-  licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-  allLicenses = ["Apache-2.0"]
+task sourcesJar(type: Jar) {
+  from android.sourceSets.main.java.srcDirs
+  archiveClassifier = 'sources'
 }
 
-apply from: rootDir.absolutePath + '/gradle/installv1.gradle'
-apply from: rootDir.absolutePath + '/gradle/bintrayv1.gradle'
+artifacts {
+  archives sourcesJar
+}
+
+afterEvaluate {
+  publishing {
+    publications {
+      release(MavenPublication) {
+        groupId 'com.jraska.livedata'
+        artifactId 'testing'
+        version rootProject.ext.version
+
+        from components.release
+        artifact sourcesJar
+
+        pom {
+          name = 'com.jraska.livedata'
+          description = 'LiveData Testing'
+          url = 'https://github.com/jraska/livedata-testing'
+          licenses {
+            license {
+              name = 'The Apache Software License, Version 2.0'
+              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+          developers {
+            developer {
+              id = 'jraska'
+              name = 'Josef Raska'
+            }
+          }
+
+          scm {
+            connection = 'scm:git:github.com/jraska/livedata-testing.git'
+            developerConnection = 'scm:git:ssh://github.com/jraska/livedata-testing.git'
+            url = 'https://github.com/jraska/livedata-testing/tree/main'
+          }
+        }
+      }
+    }
+  }
+}
+
+// Adding these directly into signing {} below didn't work :idk
+ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
+ext["signing.password"] = System.getenv("SIGNING_KEY_PASSWORD")
+ext["signing.secretKeyRingFile"] = "$buildDir/signing-key.gpg"
+
+signing {
+  sign publishing.publications
+}
