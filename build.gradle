@@ -1,18 +1,17 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
   ext.kotlin_version = '1.5.0'
   repositories {
     google()
     mavenCentral()
-    jcenter() // needed for the bintray plugin - will be removed after we migrate to Maven publishing
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:4.2.1'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-    classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
   }
+}
+
+plugins {
+  id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
 allprojects {
@@ -30,4 +29,17 @@ task clean(type: Delete) {
 ext {
   version = '1.1.2'
   versionCode = 13
+}
+
+nexusPublishing {
+  repositories {
+    sonatype {
+      nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+      snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+
+      username = System.getenv("SONATYPE_USER")
+      password = System.getenv("SONATYPE_PASSWORD")
+      stagingProfileId = System.getenv("SONATYPE_STAGING_PROFILE_ID")
+    }
+  }
 }
