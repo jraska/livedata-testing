@@ -1,8 +1,7 @@
 # LiveData Testing
 TestObserver to easily test LiveData and make assertions on them.
 
-[![CircleCI](https://circleci.com/gh/jraska/livedata-testing.svg?style=svg)](https://circleci.com/gh/jraska/livedata-testing)
-[![Download](https://api.bintray.com/packages/jraska/maven/com.jraska.livedata%3Atesting-ktx/images/download.svg)](https://bintray.com/jraska/maven/com.jraska.livedata%3Atesting-ktx/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jraska.livedata/testing-ktx/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jraska.livedata/testing-ktx)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg) ](https://github.com/jraska/livedata-testing/blob/master/LICENSE)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-LiveData%20Testing-green.svg?style=flat )]( https://android-arsenal.com/details/1/7255 )
 
