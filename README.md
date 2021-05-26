@@ -1,7 +1,7 @@
 # LiveData Testing
 TestObserver to easily test LiveData and make assertions on them.
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jraska.livedata/testing-ktx/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jraska.livedata/testing-ktx)
+[![Maven Central](https://img.shields.io/maven-central/v/com.jraska.livedata/testing-ktx.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.jraska.livedata%22%20AND%20a:%22testing-ktx%22)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg) ](https://github.com/jraska/livedata-testing/blob/master/LICENSE)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-LiveData%20Testing-green.svg?style=flat )]( https://android-arsenal.com/details/1/7255 )
 
