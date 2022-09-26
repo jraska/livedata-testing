@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-  implementation 'androidx.annotation:annotation:1.4.0'
+  implementation 'androidx.annotation:annotation:1.5.0'
   implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
   implementation 'androidx.lifecycle:lifecycle-livedata-core:2.5.1'
 
