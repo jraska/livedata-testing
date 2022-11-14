@@ -7,10 +7,10 @@ version = rootProject.ext.version
 group = 'com.jraska.livedata'
 
 android {
-  compileSdkVersion 30
+  compileSdkVersion 33
   defaultConfig {
     minSdkVersion 19
-    targetSdkVersion 30
+    targetSdkVersion 33
     versionName version
     versionCode rootProject.ext.versionCode
   }
