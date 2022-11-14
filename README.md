@@ -46,12 +46,12 @@ Don't forget to use `InstantTaskExecutorRule` from `androidx.arch.core:core-test
 
 ##### Kotlin users:
 ```groovy
-testImplementation 'com.jraska.livedata:testing-ktx:1.2.0'
+testImplementation 'com.jraska.livedata:testing-ktx:1.3.0'
 ```
 
 ##### Java users:
 ```groovy
-testImplementation 'com.jraska.livedata:testing:1.2.0'
+testImplementation 'com.jraska.livedata:testing:1.3.0'
 ```
 
 ## [Philosophy](https://medium.com/@josef.raska/effective-livedata-and-viewmodel-testing-17f25069fcd4)
