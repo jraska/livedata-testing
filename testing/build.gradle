@@ -15,6 +15,11 @@ android {
     versionCode rootProject.ext.versionCode
   }
 
+  compileOptions {
+    sourceCompatibility 17
+    targetCompatibility 17
+  }
+
   namespace 'com.jraska.livedata'
 }
 
