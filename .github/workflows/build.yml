@@ -1,5 +1,7 @@
 name: Build
 on: [push]
+env:
+  JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
 jobs:
   build:
     runs-on: ubuntu-latest

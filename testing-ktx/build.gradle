@@ -7,7 +7,7 @@ version = rootProject.ext.version
 group = 'com.jraska.livedata'
 
 android {
-  compileSdkVersion 33
+  compileSdk 33
   defaultConfig {
     minSdkVersion 19
     targetSdkVersion 33
@@ -15,10 +15,7 @@ android {
     versionCode rootProject.ext.versionCode
   }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
+  namespace 'com.jraska.livedata.ktx'
 }
 
 dependencies {
