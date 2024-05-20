@@ -29,7 +29,7 @@ dependencies {
   api project(':testing')
   implementation 'androidx.annotation:annotation:1.8.0'
   implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.7.0'
+  implementation 'androidx.lifecycle:lifecycle-livedata-core:2.8.0'
 
   testImplementation 'junit:junit:4.13.2'
   testImplementation 'androidx.arch.core:core-testing:2.2.0'
