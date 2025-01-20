@@ -31,7 +31,7 @@ dependencies {
   testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   testImplementation 'junit:junit:4.13.2'
   testImplementation 'androidx.arch.core:core-testing:2.2.0'
-  testImplementation 'org.assertj:assertj-core:3.27.2'
+  testImplementation 'org.assertj:assertj-core:3.27.3'
 }
 
 task sourcesJar(type: Jar) {
